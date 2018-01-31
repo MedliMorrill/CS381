@@ -63,11 +63,14 @@ nix = Define "nix" ["x","y","w","h"] [Call "line" [Ref "x", Ref "y", Add (Ref "x
 
 -- *** Task 4 *** --
 
-iterateSteps :: Int -> Prog
-iterateSteps 0 = []
-iterateSteps n =  iterateSteps (n-1) ++ [Call "line" [Lit (n-1), Lit (n-1), Lit n, Lit (n-1)], Call "line" [Lit (n-1), Lit (n-1), Lit n, Lit n]]
+-- Iterates n recursively, till it gets to 0, then adds a call and returns it back as a prog
+--  added rec
 
-steps :: Int -> Cmd
-steps 0 = Call "line" [Lit 0, Lit 0, Lit 0, Lit 0]
-steps n = Define "steps" ["x","y"] (iterateSteps n)
+steps :: Int -> Prog
+steps 0 = []                         --      x1         y1         x2        y2                      x1         y1       x2     y2
+steps n =  steps (n-1) ++ [Call "line" [Lit (n-1), Lit (n-1), Lit (n-1), Lit (n)], Call "line" [Lit (n-1), Lit (n-1), Lit n, Lit n]]
+
+-- steps :: Int -> Cmd
+-- steps 0 = Call "line" [Lit 0, Lit 0, Lit 0, Lit 0]
+-- steps n = Define "steps" ["x","y"] (iterateSteps n)
 
