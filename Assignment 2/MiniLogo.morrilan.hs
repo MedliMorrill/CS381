@@ -29,5 +29,5 @@ module MiniLogo where
   
   -- Task 3
   
-  nix = Define "nix" ["x","y","w","h"] [Call "line" [Ref "x", Ref "y", Add (Ref "x") (Ref "w"), Add (Ref "y") (Ref "h")], Call "line" [Add (Ref "x") (Ref "w"),"y","x",Add (Ref "y") (Ref "h")]] 
+  nix = Define "nix" ["x","y","w","h"] [Call "line" [Ref "x", Ref "y", Add (Ref "x") (Ref "w"), Add (Ref "y") (Ref "h")], Call "line" [Add (Ref "x") (Ref "w"), Ref "y", Ref "x",Add (Ref "y") (Ref "h")]] 
   
