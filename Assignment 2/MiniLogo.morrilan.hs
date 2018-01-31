@@ -28,6 +28,11 @@ module MiniLogo where
   
   
   -- Task 3
-  
+
+-- define nix (x,y,w,h) {
+--   line(x,y,x+w,y+h);
+--   line(x+w,y,x,y+h)
+-- }
+
   nix = Define "nix" ["x","y","w","h"] [Call "line" [Ref "x", Ref "y", Add (Ref "x") (Ref "w"), Add (Ref "y") (Ref "h")], Call "line" [Add (Ref "x") (Ref "w"), Ref "y", Ref "x",Add (Ref "y") (Ref "h")]] 
   
