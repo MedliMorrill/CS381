@@ -43,3 +43,13 @@ line = Define "line" ["x1","y1", "x2", "y2"] [Pen Up, Move (Ref "x1") (Ref "y1")
 
 nix = Define "nix" ["x","y","w","h"] [Call "line" [Ref "x", Ref "y", Add (Ref "x") (Ref "w"), Add (Ref "y") (Ref "h")], Call "line" [Add (Ref "x") (Ref "w"), Ref "y", Ref "x",Add (Ref "y") (Ref "h")]] 
   
+--Task 4
+
+iterateSteps :: Int -> Prog
+iterateSteps 0 = []
+iterateSteps n =  iterateSteps (n-1) ++ [Call "line" [Lit (n-1), Lit (n-1), Lit n, Lit (n-1)], Call "line" [Lit (n-1), Lit (n-1), Lit n, Lit n]]
+
+steps :: Int -> Cmd
+steps 0 = Call "line" [Lit 0, Lit 0, Lit 0, Lit 0]
+steps n = Define "steps" ["x","y"] (iterateSteps n)
+
