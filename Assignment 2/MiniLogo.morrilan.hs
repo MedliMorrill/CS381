@@ -10,7 +10,7 @@
 module MiniLogo where
 
 import Prelude hiding (Num)
-
+import Data.List
 
 
 
@@ -106,50 +106,32 @@ stripName (Call m e)     = m
 -- *** Task 6 *** --
 
 pretty :: Prog -> String
-pretty [] = []
-pretty (x : xs) = pretty xs ++ stripAll x
+pretty []       = []
+pretty (x : xs) = stripAll x ++ pretty xs 
 
 stripAll :: Cmd -> String
-stripAll (Pen m) = ("pen " ++ penCond m)
-stripAll (Move e1 e2) = ("move " ++ stripExpr e1 ++ stripExpr e2)
-stripAll (Define m v p) = ("define " ++ m ++ " ") -- Unfinished 
-
-stripAll _ = " ERROR: DOES NOT EXIST "
+stripAll (Pen b)        = ("pen " ++ penCond b)
+stripAll (Move e1 e2)   = ("move " ++ stripExpr e1 ++ stripExpr e2)
+stripAll (Define m v p) = ("define " ++ m ++ " " ++ splitVar v ++ pretty p) -- Unfinished 
+stripAll (Call m eL)    = ("call " ++ m ++ " " ++ splitExpr eL)
 
 penCond :: Mode -> String
-penCond Up = "up"
+penCond Up   = "up"
 penCond Down = "down"
 
 stripExpr :: Expr -> String
 stripExpr (Ref v) = v
 stripExpr (Lit n) = ("" ++ show n)
-stripExpr (Add e1 e2) = (stripExpr e1) ++ (stripExpr e2)
+stripExpr (Add e1 e2) = (stripExpr e1) ++ " + " ++ (stripExpr e2)
 
-stripVar :: [Var] -> String
-stripVar [] = []
--- stripMove :: Expr -> String
--- stripMove (Ref v)
--- stripMove ()
+splitVar :: [Var] -> String
+splitVar []       = []
+splitVar (v : vs) = v ++ " " ++ splitVar vs 
 
+splitExpr :: [Expr] -> String
+splitExpr []       = []
+splitExpr (e : es) = splitExpr es ++ ",    " ++ stripExpr e
 
-
--- ***Temperary Help Line***---
--- type Prog = [Cmd]
-
--- data Mode = Up
---           | Down
---   deriving (Eq,Show)
-
--- data Expr = Ref Var
---           | Lit Num
---           | Add Expr Expr
---   deriving (Eq,Show)
-
--- data Cmd  = Pen Mode
---           | Move Expr Expr
---           | Define Macro [Var] Prog
---           | Call Macro [Expr]
---   deriving (Eq,Show)
 
 -- prog	::=	ε | cmd; prog
 
@@ -167,4 +149,6 @@ stripVar [] = []
 -- *** TESTS *** --
 -- 
 -- >>> pretty [Pen Up, Move (Ref "x1") (Ref "y1"), Pen Down, Move (Ref "x2") (Ref "y2")]
+-- 
+-- >>> pretty [Call "line" [Ref "x", Ref "y", Add (Ref "x") (Ref "w"), Add (Ref "y") (Ref "h")], Call "line" [Add (Ref "x") (Ref "w"), Ref "y", Ref "x", Add (Ref "y") (Ref "h")]] 
 -- 
