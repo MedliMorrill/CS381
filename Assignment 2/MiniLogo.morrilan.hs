@@ -1,7 +1,7 @@
 --------------------------------------------------
------ Group Names: Andrew Morrill, , 
------ Group ONIDs: morrilan      , ,
------ Date: 3/01/18       			Class: CS 381
+----- Group Names: Andrew Morrill, Pierre-Louis Sixdenier, Ehmar Khan
+----- Group ONIDs: morrilan, sixdenip, khaneh
+----- Date: 2/01/18       			Class: CS 381
 ----- Main File Name: MiniLogo.morrilan.hs
 ----- Purpose: Describe MiniLogo in Haskell
 ----- Completion:
@@ -158,6 +158,3 @@ rmvChars n a = init (rmvChars (n - 1) a)
 -- 
 -- >>> pretty [Call "line" [Ref "x", Ref "y", Add (Ref "x") (Ref "w"), Add (Ref "y") (Ref "h")], Call "line" [Add (Ref "x") (Ref "w"), Ref "y", Ref "x", Add (Ref "y") (Ref "h")]] 
 -- 
-
-
-
