@@ -1,6 +1,6 @@
 --------------------------------------------------
------ Group Names: , , 
------ Group ONIDs: morrilan, ,
+----- Group Names: Andrew Morrill, , 
+----- Group ONIDs: morrilan      , ,
 ----- Date: 3/01/18       			Class: CS 381
 ----- Main File Name: MiniLogo.morrilan.hs
 ----- Purpose: Describe MiniLogo in Haskell
@@ -109,11 +109,13 @@ pretty :: Prog -> String
 pretty []       = []
 pretty (x : xs) = stripAll x ++ pretty xs 
 
+
+
 stripAll :: Cmd -> String
-stripAll (Pen b)        = ("pen " ++ penCond b)
-stripAll (Move e1 e2)   = ("move " ++ stripExpr e1 ++ stripExpr e2)
-stripAll (Define m v p) = ("define " ++ m ++ " " ++ splitVar v ++ pretty p) -- Unfinished 
-stripAll (Call m eL)    = ("call " ++ m ++ " " ++ splitExpr eL)
+stripAll (Pen b)        = ("pen " ++ penCond b ++ "; ")
+stripAll (Move e1 e2)   = ("move " ++ "("++  stripExpr e1 ++ ", "++ stripExpr e2 ++ "); ")
+stripAll (Define m v p) = ("define " ++ m ++ " " ++ splitVar v ++ pretty p)
+stripAll (Call m eL)    = ("call " ++ m ++ " (" ++ rmvChars 2 (splitExpr eL) ++ "); ")
 
 penCond :: Mode -> String
 penCond Up   = "up"
@@ -132,6 +134,10 @@ splitExpr :: [Expr] -> String
 splitExpr []       = []
 splitExpr (e : es) = stripExpr e ++ ", " ++ splitExpr es
 
+-- Must have at least Int characters in the list
+rmvChars :: Int -> [a] -> [a]
+rmvChars 0 a = a
+rmvChars n a = init (rmvChars (n - 1) a)
 
 -- prog	::=	ε | cmd; prog
 
