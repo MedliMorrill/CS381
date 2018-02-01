@@ -130,7 +130,7 @@ splitVar (v : vs) = v ++ " " ++ splitVar vs
 
 splitExpr :: [Expr] -> String
 splitExpr []       = []
-splitExpr (e : es) = splitExpr es ++ ",    " ++ stripExpr e
+splitExpr (e : es) = stripExpr e ++ ", " ++ splitExpr es
 
 
 -- prog	::=	ε | cmd; prog
@@ -152,3 +152,6 @@ splitExpr (e : es) = splitExpr es ++ ",    " ++ stripExpr e
 -- 
 -- >>> pretty [Call "line" [Ref "x", Ref "y", Add (Ref "x") (Ref "w"), Add (Ref "y") (Ref "h")], Call "line" [Add (Ref "x") (Ref "w"), Ref "y", Ref "x", Add (Ref "y") (Ref "h")]] 
 -- 
+
+
+
