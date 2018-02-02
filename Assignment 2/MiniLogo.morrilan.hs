@@ -114,7 +114,7 @@ pretty (x : xs) = stripAll x ++ pretty xs
 stripAll :: Cmd -> String
 stripAll (Pen b)        = ("pen " ++ penCond b ++ "; ")
 stripAll (Move e1 e2)   = ("move " ++ "("++  stripExpr e1 ++ ", "++ stripExpr e2 ++ "); ")
-stripAll (Define m v p) = ("define " ++ m ++ " " ++ splitVar v ++ pretty p)
+stripAll (Define m v p) = ("define " ++ m ++ " (" ++ rmvChars 2 (splitVar v) ++ ") {" ++ rmvChars 1 (pretty p) ++ "}")
 stripAll (Call m eL)    = ("call " ++ m ++ " (" ++ rmvChars 2 (splitExpr eL) ++ "); ")
 
 penCond :: Mode -> String
@@ -128,7 +128,7 @@ stripExpr (Add e1 e2) = (stripExpr e1) ++ " + " ++ (stripExpr e2)
 
 splitVar :: [Var] -> String
 splitVar []       = []
-splitVar (v : vs) = v ++ " " ++ splitVar vs 
+splitVar (v : vs) = v ++ ", " ++ splitVar vs 
 
 splitExpr :: [Expr] -> String
 splitExpr []       = []
@@ -158,3 +158,4 @@ rmvChars n a = init (rmvChars (n - 1) a)
 -- 
 -- >>> pretty [Call "line" [Ref "x", Ref "y", Add (Ref "x") (Ref "w"), Add (Ref "y") (Ref "h")], Call "line" [Add (Ref "x") (Ref "w"), Ref "y", Ref "x", Add (Ref "y") (Ref "h")]] 
 -- 
+-- >>> pretty [Define "nix" ["x","y","w","h"] [Call "line" [Ref "x", Ref "y", Add (Ref "x") (Ref "w"), Add (Ref "y") (Ref "h")], Call "line" [Add (Ref "x") (Ref "w"), Ref "y", Ref "x", Add (Ref "y") (Ref "h")]]] 
