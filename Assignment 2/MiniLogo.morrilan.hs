@@ -1,6 +1,6 @@
 --------------------------------------------------
 ----- Group Names: Andrew Morrill, Pierre-Louis Sixdenier, Ehmar Khan
------ Group ONIDs: morrilan, sixdenip, khaneh
+----- Group ONIDs: morrilan,       sixdenip,               khaneh
 ----- Date: 2/01/18       			Class: CS 381
 ----- Main File Name: MiniLogo.morrilan.hs
 ----- Purpose: Describe MiniLogo in Haskell
@@ -158,7 +158,7 @@ rmvChars n a = init (rmvChars (n - 1) a)
 
 -- *** TESTS *** --
 
-tp1 = pretty [Pen Up, Move (Ref "x1") (Ref "y1"), Pen Down, Move (Ref "x2") (Ref "y2")]
+tp1 = putStrLn (pretty [Pen Up, Move (Ref "x1") (Ref "y1"), Pen Down, Move (Ref "x2") (Ref "y2")])
  
 tp2 = pretty [Call "line" [Ref "x", Ref "y", Add (Ref "x") (Ref "w"), Add (Ref "y") (Ref "h")], Call "line" [Add (Ref "x") (Ref "w"), Ref "y", Ref "x", Add (Ref "y") (Ref "h")]] 
 
