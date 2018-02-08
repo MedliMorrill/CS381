@@ -50,9 +50,11 @@ draw p = let (_,ls) = prog p start in toHTML ls
 --   ((Down,(4,5)),Just ((2,3),(4,5)))
 --
 cmd :: Cmd -> State -> (State, Maybe Line)
-cmd = undefined
-
-
+cmd (Pen Up)   (_, cord)    = ((Up, cord),Nothing)  
+cmd (Pen Down) (_, cord)    = ((Down,cord),Nothing)
+cmd (Move x y) (Up, cord)   = ((Up,(x,y)),Nothing)
+cmd (Move x y) (Down, cord) = ((Down,(x,y)),Just ((cord),(x,y))) -- From cord to move x y
+ 
 -- | Semantic function for Prog.
 --
 --   >>> prog (nix 10 10 5 7) start
@@ -60,8 +62,19 @@ cmd = undefined
 --
 --   >>> prog (steps 2 0 0) start
 --   ((Down,(2,2)),[((0,0),(0,1)),((0,1),(1,1)),((1,1),(1,2)),((1,2),(2,2))])
+-- 
+-- Base Case: no Cmds, return the state with Nothing
+-- send first Cmd to cmd along with state, then return back state and Maybe line.
+-- f (g x) = (f . g) x
+--  DOESNT WORK
 prog :: Prog -> State -> (State, [Line])
-prog = undefined
+prog [] s = (s, []) 
+prog (c : cl)
+prog (c : cl) s = case cmd c s of 
+                    (state, Nothing) -> prog cl state
+                    (state, Just a) ->  (prog cl ) . (state, a)
+-- prog (c : cl) s = ((cmd c s) ++ prog cl)
+
 
 
 --
