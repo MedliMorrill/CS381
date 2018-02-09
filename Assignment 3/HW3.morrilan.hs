@@ -76,13 +76,24 @@ cmd (Move x y) = \s -> case s of
 -- send first Cmd to cmd along with state, then return back state and Maybe line.
 -- f (g x) = (f . g) x
 --  DOESNT WORK
+-- prog :: Prog -> State -> (State, [Line])
+-- prog [] = \s -> (s, []) 
+-- prog (c : cl) =  \s -> case cmd c s of 
+--                          (state, Nothing) -> prog cl state []
+--                          (state, Just a)  -> prog cl state a
+
 prog :: Prog -> State -> (State, [Line])
 prog [] = \s -> (s, []) 
-prog (c : cl) = (prog cl . cmd c, cmd c)
+prog p = \s ->  progHelper p [] s
 
--- prog (c : cl)  = \s -> case cmd c s of 
---                          (state, Nothing) -> prog cl state
---                          (state, Just a) ->  (prog cl state) . (cmd )
+progHelper :: Prog -> [Line] -> State -> (State, [Line])
+progHelper [] l = \s -> (s, l) 
+progHelper (c : cl) l =  \s -> case cmd c s of 
+                         (state, Nothing) -> progHelper cl l state  
+                         (state, Just a)  -> progHelper cl (l ++ [a]) state
+
+-- prog (c : cl) = prog cl . cmd c
+
 -- prog :: Prog -> State -> (State, [Line])
 -- prog [] s = (s, []) 
 -- prog (c : cl) s = case cmd c s of 
@@ -99,4 +110,4 @@ prog (c : cl) = (prog cl . cmd c, cmd c)
 -- | This should be a MiniMiniLogo program that draws an amazing picture.
 --   Add as many helper functions as you want.
 amazing :: Prog
-amazing = undefined
+amazing = (nix 10 10 5 7) 
