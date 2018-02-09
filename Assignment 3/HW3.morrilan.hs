@@ -49,11 +49,20 @@ draw p = let (_,ls) = prog p start in toHTML ls
 --   >>> cmd (Move 4 5) (Down,(2,3))
 --   ((Down,(4,5)),Just ((2,3),(4,5)))
 --
+-- cmd :: Cmd -> State -> (State, Maybe Line)
+-- cmd (Pen Up)   (_, cord)    = ((Up, cord),Nothing)  
+-- cmd (Pen Down) (_, cord)    = ((Down,cord),Nothing)
+-- cmd (Move x y) (Up, cord)   = ((Up,(x,y)),Nothing)
+-- cmd (Move x y) (Down, cord) = ((Down,(x,y)),Just ((cord),(x,y))) -- From cord to move x y
+
 cmd :: Cmd -> State -> (State, Maybe Line)
-cmd (Pen Up)   (_, cord)    = ((Up, cord),Nothing)  
-cmd (Pen Down) (_, cord)    = ((Down,cord),Nothing)
-cmd (Move x y) (Up, cord)   = ((Up,(x,y)),Nothing)
-cmd (Move x y) (Down, cord) = ((Down,(x,y)),Just ((cord),(x,y))) -- From cord to move x y
+cmd (Pen Up)   = \s -> case s of
+                         (_, cord) -> ((Up, cord), Nothing)  
+cmd (Pen Down) = \s -> case s of
+                         (_, cord) -> ((Down,cord), Nothing)
+cmd (Move x y) = \s -> case s of
+                         (Up, _)      -> ((Up,(x,y)), Nothing)
+                         (Down, cord) -> ((Down,(x,y)), Just ((cord),(x,y))) -- From cord to move x y
  
 -- | Semantic function for Prog.
 --
@@ -68,12 +77,18 @@ cmd (Move x y) (Down, cord) = ((Down,(x,y)),Just ((cord),(x,y))) -- From cord to
 -- f (g x) = (f . g) x
 --  DOESNT WORK
 prog :: Prog -> State -> (State, [Line])
-prog [] s = (s, []) 
-prog (c : cl)
-prog (c : cl) s = case cmd c s of 
-                    (state, Nothing) -> prog cl state
-                    (state, Just a) ->  (prog cl ) . (state, a)
--- prog (c : cl) s = ((cmd c s) ++ prog cl)
+prog [] = \s -> (s, []) 
+prog (c : cl) = (prog cl . cmd c, cmd c)
+
+-- prog (c : cl)  = \s -> case cmd c s of 
+--                          (state, Nothing) -> prog cl state
+--                          (state, Just a) ->  (prog cl state) . (cmd )
+-- prog :: Prog -> State -> (State, [Line])
+-- prog [] s = (s, []) 
+-- prog (c : cl) s = case cmd c s of 
+--                     (state, Nothing) -> prog cl state
+--                     (state, Just a) ->  (prog cl state, [a])
+
 
 
 
