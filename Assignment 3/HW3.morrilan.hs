@@ -1,3 +1,12 @@
+--------------------------------------------------
+----- Group Names: Andrew Morrill, Pierre-Louis Sixdenier, Ehmar Khan
+----- Group ONIDs: morrilan,       sixdenip,               khaneh
+----- Date: 2/13/18       			Class: CS 381
+----- Main File Name: HW3.morrilan.hs
+----- Purpose: Implements Programs
+----- Completion: 100% requirements done, no time for EC
+--------------------------------------------------
+
 module HW3 where
 
 import MiniMiniLogo
@@ -55,6 +64,8 @@ draw p = let (_,ls) = prog p start in toHTML ls
 -- cmd (Move x y) (Up, cord)   = ((Up,(x,y)),Nothing)
 -- cmd (Move x y) (Down, cord) = ((Down,(x,y)),Just ((cord),(x,y))) -- From cord to move x y
 
+--  Uses cases to divide up the different constructor combinations.
+
 cmd :: Cmd -> State -> (State, Maybe Line)
 cmd (Pen Up)   = \s -> case s of
                          (_, cord) -> ((Up, cord), Nothing)  
@@ -82,6 +93,8 @@ cmd (Move x y) = \s -> case s of
 --                          (state, Nothing) -> prog cl state []
 --                          (state, Just a)  -> prog cl state a
 
+--  Created helper function because we couldnt figure it out all day
+--   Helper recieves an extra argument making the solution trivial.
 prog :: Prog -> State -> (State, [Line])
 prog [] = \s -> (s, []) 
 prog p = \s ->  progHelper p [] s
