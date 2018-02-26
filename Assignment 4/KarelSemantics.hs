@@ -25,6 +25,7 @@ test (Empty) w (_, _, b) = if b == 0 then True else False
 --   World doesnt change, robot position does
 -- PutBeeper: if bag is empty, error. otherwise remove beeper
 -- Turn: turn and return OK, update Robot direction
+-- Block: Call self and send to other methods, end if error or no list.
 -- | Valuation function for Stmt.
 stmt :: Stmt -> Defs -> World -> Robot -> Result
 stmt Shutdown   _ _ r = Done r 
@@ -41,7 +42,10 @@ stmt PutBeeper _ w r = let q = getPos r
                              else OK (incBeeper q w) (decBag r)
 stmt (Turn d) _ w (p, c, b) = OK w (p, (cardTurn d c), b) 
 -- stmt (Turn d) _ w r = OK w (setFacing(cardTurn d (getFacing r))r)
-
+stmt (Block []) def w r = OK w r
+stmt (Block (i:j)) def w r = case stmt i def w r of
+                               OK w' r' -> stmt (Block j) def w' r'
+                               Error s  -> Error s
 
 
 -- | Run a Karel program.
