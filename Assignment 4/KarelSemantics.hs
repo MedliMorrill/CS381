@@ -26,6 +26,8 @@ test (Empty) w (_, _, b) = if b == 0 then True else False
 -- PutBeeper: if bag is empty, error. otherwise remove beeper
 -- Turn: turn and return OK, update Robot direction
 -- Block: Call self and send to other methods, end if error or no list.
+-- If
+-- Call: fount function find, made my own version, findDef, to check for existing macro
 -- | Valuation function for Stmt.
 stmt :: Stmt -> Defs -> World -> Robot -> Result
 stmt Shutdown   _ _ r = Done r 
@@ -51,6 +53,15 @@ stmt (If t s1 s2) def w r = if test t w r
                                then stmt s1 def w r 
                                else stmt s2 def w r
 
+stmt (Call m) def w r = case findDef m def of
+                          Just s -> stmt s def w r 
+                          Nothing -> Error("Undefined macro: " ++ m) 
+
+findDef :: Macro -> Defs -> Maybe Stmt
+findDef m [] = Nothing
+findDef m ((n, s):j) = if m == n 
+                          then Just s
+                          else findDef m j
 -- | Run a Karel program.
 prog :: Prog -> World -> Robot -> Result
 prog (m,s) w r = stmt s m w r
