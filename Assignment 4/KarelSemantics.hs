@@ -40,13 +40,16 @@ stmt PutBeeper _ w r = let q = getPos r
                        in if isEmpty r
                              then Error ("No beeper to remove from bag") 
                              else OK (incBeeper q w) (decBag r)
+
 stmt (Turn d) _ w (p, c, b) = OK w (p, (cardTurn d c), b) 
--- stmt (Turn d) _ w r = OK w (setFacing(cardTurn d (getFacing r))r)
+
 stmt (Block []) def w r = OK w r
 stmt (Block (i:j)) def w r = case stmt i def w r of
                                OK w' r' -> stmt (Block j) def w' r'
-                               Error s  -> Error s
-
+                               Error t  -> Error t
+stmt (If t s1 s2) def w r = if test t w r 
+                               then stmt s1 def w r 
+                               else stmt s2 def w r
 
 -- | Run a Karel program.
 prog :: Prog -> World -> Robot -> Result
