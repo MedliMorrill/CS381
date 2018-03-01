@@ -33,7 +33,7 @@ stmt :: Stmt -> Defs -> World -> Robot -> Result
 stmt Shutdown   _ _ r = Done r 
 stmt Move _ w (p, c, b) = if test (Clear Front) w (p, c, b)
                             then OK w ((neighbor c p), c, b)
-                            else Error ("Ran into a wall at: " ++ show p)
+                            else Error ("Ran into a wall at: " ++ show (neighbor c p))
 stmt PickBeeper _ w r = let q = getPos r
                         in if hasBeeper q w
                               then OK (decBeeper q w) (incBag r)
@@ -49,6 +49,8 @@ stmt (Block []) def w r = OK w r
 stmt (Block (i:j)) def w r = case stmt i def w r of
                                OK w' r' -> stmt (Block j) def w' r'
                                Error t  -> Error t
+                               Done r -> Done r
+
 stmt (If t s1 s2) def w r = if test t w r 
                                then stmt s1 def w r 
                                else stmt s2 def w r
@@ -56,6 +58,19 @@ stmt (If t s1 s2) def w r = if test t w r
 stmt (Call m) def w r = case findDef m def of
                           Just s -> stmt s def w r 
                           Nothing -> Error("Undefined macro: " ++ m) 
+
+stmt (Iterate 0 s) def w r = OK w r
+stmt (Iterate n s) def w r = case stmt s def w r of
+                               OK w' r' -> stmt (Iterate (n - 1) s) def w' r'
+                               Error t -> Error t
+                               Done r -> Done r
+
+stmt (While t s) def w r = if test t w r
+                              then case stmt s def w r of
+                                     OK w' r' -> stmt (While t s) def w' r'
+                                     Error t -> Error t
+                                     Done r -> Done r
+                              else OK w r
 
 findDef :: Macro -> Defs -> Maybe Stmt
 findDef m [] = Nothing
