@@ -7,7 +7,6 @@
 ----- Completion: 100% requirements done
 --------------------------------------------------
 
-
 module KarelSemantics where
 
 import Prelude hiding (Either(..))
