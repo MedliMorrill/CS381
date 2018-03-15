@@ -106,6 +106,22 @@ cousin(X,Y) :- uncle(X,Z), parent(Z,Y).
 % 1. Define the predicate `cmd/3`, which describes the effect of executing a
 %    command on the stack.
 
+expr(N) :- number(N).
+expr(S) :- string(S).
+expr(B) :- boolean(t), boolean(f).
+expr(add(L,R)) :- expr(L), expr(R).
+expr(lte(L,R)) :- lte(L), lte(R).
+%% expr(f).
+%% expr(str).
+
+cmd(expr(N), X, Y) :-.  %% have no idea what to put here
+cmd(expr(E), E|X, Y|E) :- cmd(E, X, Num), X is Y|Num.
+cmd(N, X, Y) :- cmd(E,Num), Y is Num|X.
+%% cmd(S, X, Y).
+%% cmd(B, X, Y).
+%% cmd(add(L, R), X, Y).
+%% cmd(lte(L, R), X, Y).
+
 
 % 2. Define the predicate `prog/3`, which describes the effect of executing a
 %    program on the stack.
