@@ -94,9 +94,10 @@ cousin(X,Y) :- uncle(X,Z), parent(Z,Y).
 % 9. Define the predicate `ancestor/2`.
 
 
+ancestor(X,Y) :- parent(X,Y).
+ancestor(X,Y) :- parent(X,Z), ancestor(Z,Y).
 
 % Extra credit: Define the predicate `related/2`.
-
 
 
 %%
