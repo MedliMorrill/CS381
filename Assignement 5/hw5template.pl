@@ -111,16 +111,25 @@ expr(S) :- string(S).
 expr(B) :- boolean(t), boolean(f).
 expr(add(L,R)) :- expr(L), expr(R).
 expr(lte(L,R)) :- lte(L), lte(R).
+%% expr(Z).
+%% expr([]).
 %% expr(f).
 %% expr(str).
 
-cmd(expr(N), X, Y) :-.  %% have no idea what to put here
-cmd(expr(E), E|X, Y|E) :- cmd(E, X, Num), X is Y|Num.
-cmd(N, X, Y) :- cmd(E,Num), Y is Num|X.
+%% cmd(expr(E), X, X).  
+
+cmd(add, [X,Y|Z], [R|Z]) :- cmd(R, Z, S1), R is X+Y.
+%% cmd(lte, [X,Y|Z], [R|Z]) :- cmd(R, Z, S1), X <= Y == t.
+%% cmd(lte, [X,Y|Z], [R|Z]) :- cmd(R, Z, S1), X > Y == f.
+cmd(C, S1, [C|S1]).
+
+%% cmd(if(P1,_),[X|S1],S2) :- prog(P1,S1,S2), X == t.
+%% cmd(if(_,P2),[X|S1],S2) :- prog(P2,S1,S2), X == f. 
+%% cmd(N, X, Y) :- cmd(E,Num), Y is Num|X.
 %% cmd(S, X, Y).
 %% cmd(B, X, Y).
 %% cmd(add(L, R), X, Y).
-%% cmd(lte(L, R), X, Y).
+%% cmd(lte, X, Y) :- cmd(C, S1, [C|S1])..
 
 
 % 2. Define the predicate `prog/3`, which describes the effect of executing a
