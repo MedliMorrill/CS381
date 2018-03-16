@@ -119,8 +119,9 @@ expr(lte(L,R)) :- lte(L), lte(R).
 %% cmd(expr(E), X, X).  
 
 cmd(add, [X,Y|Z], [R|Z]) :- cmd(R, Z, S1), R is X+Y.
-%% cmd(lte, [X,Y|Z], [R|Z]) :- cmd(R, Z, S1), X <= Y == t.
-%% cmd(lte, [X,Y|Z], [R|Z]) :- cmd(R, Z, S1), X > Y == f.
+cmd(lte, [X,Y|Z], [R|Z]) :- cmd(R, Z, S1), R == X<=Y.
+ltheq(X,Y).
+%% cmd(lte, [X,Y|Z], [R|Z]) :- cmd(R, Z, S1), R is X > Y.
 cmd(C, S1, [C|S1]).
 
 %% cmd(if(P1,_),[X|S1],S2) :- prog(P1,S1,S2), X == t.
