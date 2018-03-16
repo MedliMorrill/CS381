@@ -14,7 +14,6 @@ import Data.Function (fix)
 
 import KarelSyntax
 import KarelState
-import KarelExamples
 
 
 -- | Valuation function for Test.
@@ -35,7 +34,7 @@ stmt Shutdown   _ _ r = Done r
 --   World doesnt change, robot position does
 stmt Move _ w (p, c, b) = if test (Clear Front) w (p, c, b)
                             then OK w ((neighbor c p), c, b)
-                            else Error ("Ran into a wall at: " ++ show (neighbor c p))
+                            else Error ("Wall at: " ++ show (neighbor c p))
 
 -- PickBeeper: if Beeper exists then pick up Beeper, otherwise Error
 stmt PickBeeper _ w r = let q = getPos r
