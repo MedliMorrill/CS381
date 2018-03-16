@@ -106,9 +106,20 @@ ancestor(X,Y) :- parent(X,Z), ancestor(Z,Y).
 
 % 1. Define the predicate `cmd/3`, which describes the effect of executing a
 %    command on the stack.
+bool(f).
+bool(t).
 
+
+expr(N) :- number(N).
+expr(S) :- string(S).
+expr(B) :- bool(B).
+expr(add(L,R)) :- expr(L), expr(R).
+expr(lte(L,R)) :- expr(L), expr(R).
+
+cmd(add, [X,Y|S1], S2) :- cmd(_, S1, S2), S2 is X+Y.
+
+%% cmd(if(P1,),[X|S1],S2) :- prog(P1,S1,S2), X == t.
+%% cmd(if(,P2),[X|S1],S2) :- prog(P2,S1,S2), X == f.
 
 % 2. Define the predicate `prog/3`, which describes the effect of executing a
 %    program on the stack.
-
-
