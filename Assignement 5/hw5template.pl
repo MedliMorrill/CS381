@@ -133,18 +133,6 @@ cmd(C, S1, [C|S1]).
 %% cmd(B, X, Y).
 %% cmd(add(L, R), X, Y).
 %% cmd(lte, X, Y) :- cmd(C, S1, [C|S1])..
-
-
-expr(N) :- number(N).
-expr(S) :- string(S).
-expr(B) :- bool(B).
-expr(add(L,R)) :- expr(L), expr(R).
-expr(lte(L,R)) :- expr(L), expr(R).
-
-cmd(add, [X,Y|S1], S2) :- cmd(_, S1, S2), S2 is X+Y.
-
-%% cmd(if(P1,),[X|S1],S2) :- prog(P1,S1,S2), X == t.
-%% cmd(if(,P2),[X|S1],S2) :- prog(P2,S1,S2), X == f.
-
+    
 % 2. Define the predicate `prog/3`, which describes the effect of executing a
 %    program on the stack.
